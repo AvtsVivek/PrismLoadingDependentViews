@@ -33,6 +33,10 @@ namespace SimplePrismShell.Prism
                     foreach (var atr in GetCustomAttributes<RibbonTabAttribute>(newView.GetType()))
                     {
                         var ribbonTabItem = Activator.CreateInstance(atr.Type) as RibbonTabItem;
+
+                        if (ribbonTabItem is ISupportDataContext && newView is ISupportDataContext)
+                            ((ISupportDataContext)ribbonTabItem).DataContext = ((ISupportDataContext)newView).DataContext;
+
                         tabList.Add(ribbonTabItem!);
                     }
 

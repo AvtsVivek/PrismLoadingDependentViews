@@ -12,13 +12,12 @@ public interface ISupportDataContext
 
 
 - Impliment that interface for aall of the views.
-- 
+- Add the following logic to the RibbonRegionBehavior 
 
 ```cs
-
+if (ribbonTabItem is ISupportDataContext && newView is ISupportDataContext)
+    ((ISupportDataContext)ribbonTabItem).DataContext = ((ISupportDataContext)newView).DataContext;
 ```
 
-- Now run the app.
-![Tab Control](./images/20TabRegion20.jpg)
-- 
+- Now run the app. The update button the ribbon tab will invoke the one on View below. 
 
