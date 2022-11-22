@@ -23,6 +23,7 @@
 <ContentControl prism:RegionManager.RegionName="SubRegion"  />
 ```
 - Change the DependentViewRegionBehavior
+- Note there is TODO in the above class. 
 
 - Now run the app. The update button the ribbon tab will invoke the one on View below. 
 
