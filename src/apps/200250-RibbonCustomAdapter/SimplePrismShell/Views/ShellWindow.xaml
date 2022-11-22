@@ -18,7 +18,7 @@
 
     <igWPF:RibbonWindowContentHost Theme="Office2013">
         <igWPF:RibbonWindowContentHost.Ribbon>
-            <igWPF:XamRibbon >
+            <igWPF:XamRibbon prism:RegionManager.RegionName="RibbonTabRegion" >
                 <igWPF:XamRibbon.ApplicationMenu2010>
                     <igWPF:ApplicationMenu2010 Caption="File" />
                 </igWPF:XamRibbon.ApplicationMenu2010>

@@ -7,20 +7,6 @@ namespace SimplePrismShell
     /// </summary>
     public partial class App : Application
     {
-        //protected override Window CreateShell()
-        //{
-        //    return Container.Resolve<ShellWindow>();
-        //}
-
-        //protected override void RegisterTypes(IContainerRegistry containerRegistry)
-        //{
-
-        //}
-
-        //protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
-        //{
-        //    moduleCatalog.AddModule<ModuleAModule>();
-        //}
 
         protected override void OnStartup(StartupEventArgs e)
         {
