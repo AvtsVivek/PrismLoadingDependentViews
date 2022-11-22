@@ -7,11 +7,14 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SimplePrismShell.Prism
 {
     public class DependentViewRegionBehavior : RegionBehavior
     {
+        Dictionary<object, List<DependentViewInfo>> _dependentViewCache = new Dictionary<object, List<DependentViewInfo>>();
+
         public const string BehaviorKey = "DependentViewRegionBehavior";
 
         protected override void OnAttach()
@@ -27,25 +30,43 @@ namespace SimplePrismShell.Prism
 
                 foreach (var newView in e.NewItems!)
                 {
-                    foreach (var atr in GetCustomAttributes<DependentViewAttribute>(newView.GetType()))
+                    var dependentViews = new List<DependentViewInfo>();
+
+                    if (_dependentViewCache.ContainsKey(newView))
                     {
-                        var info = CreateDependentViewInfo(atr);
+                        dependentViews = _dependentViewCache[newView];
+                    }
+                    else
+                    {
+                        foreach (var atr in GetCustomAttributes<DependentViewAttribute>(newView.GetType()))
+                        {
+                            var info = CreateDependentViewInfo(atr);
 
-                        if (info.View is ISupportDataContext && newView is ISupportDataContext)
-                            ((ISupportDataContext)info.View).DataContext = ((ISupportDataContext)newView).DataContext;
+                            if (info.View is ISupportDataContext && newView is ISupportDataContext)
+                                ((ISupportDataContext)info.View).DataContext = ((ISupportDataContext)newView).DataContext;
 
-                        tabList.Add(info);
+                            dependentViews.Add(info);
+                        }
+
+                        if (!_dependentViewCache.ContainsKey(newView))
+                            _dependentViewCache.Add(newView, dependentViews);
                     }
 
-                    tabList.ForEach(x => Region.RegionManager.Regions[x.TargetRegionName].Add(x.View));
+                    dependentViews.ForEach(item => Region.RegionManager.Regions[item.TargetRegionName].Add(item.View));
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                //TODO: cache so we can improve perf and remove views from region
-                
-                // var views = Region.RegionManager.Regions[RibbonTabRegionName].Views.ToList();
-                // views.ForEach(x => Region.RegionManager.Regions[RibbonTabRegionName].Remove(x));
+                foreach (var oldView in e.OldItems!)
+                {
+                    if (_dependentViewCache.ContainsKey(oldView))
+                    {
+                        _dependentViewCache[oldView].ForEach(x => Region.RegionManager.Regions[x.TargetRegionName].Remove(x.View));
+
+                        if (!ShouldKeepAlive(oldView))
+                            _dependentViewCache.Remove(oldView);
+                    }
+                }
             }
         }
 
@@ -59,6 +80,50 @@ namespace SimplePrismShell.Prism
                 info.View = Activator.CreateInstance(attribute.Type)!;
 
             return info;
+        }
+
+        private static bool ShouldKeepAlive(object view)
+        {
+            IRegionMemberLifetime lifetime = GetItemOrContextLifetime(view);
+            if (lifetime != null)
+                return lifetime.KeepAlive;
+
+            RegionMemberLifetimeAttribute lifetimeAttribute = GetItemOrContextLifetimeAttribute(view);
+            if (lifetimeAttribute != null)
+                return lifetimeAttribute.KeepAlive;
+
+            return true;
+        }
+
+        private static RegionMemberLifetimeAttribute GetItemOrContextLifetimeAttribute(object view)
+        {
+            var lifetimeAttribute = GetCustomAttributes<RegionMemberLifetimeAttribute>(view.GetType()).FirstOrDefault();
+            if (lifetimeAttribute != null)
+                return lifetimeAttribute;
+
+            var frameworkElement = view as FrameworkElement;
+            if (frameworkElement != null && frameworkElement.DataContext != null)
+            {
+                var dataContext = frameworkElement.DataContext;
+                var contextLifetimeAttribute =
+                    GetCustomAttributes<RegionMemberLifetimeAttribute>(dataContext.GetType()).FirstOrDefault();
+                return contextLifetimeAttribute!;
+            }
+
+            return null!;
+        }
+
+        private static IRegionMemberLifetime GetItemOrContextLifetime(object view)
+        {
+            var regionLifetime = view as IRegionMemberLifetime;
+            if (regionLifetime != null)
+                return regionLifetime;
+
+            var frameworkElement = view as FrameworkElement;
+            if (frameworkElement != null)
+                return (frameworkElement.DataContext as IRegionMemberLifetime)!;
+
+            return null!;
         }
 
         private static IEnumerable<T> GetCustomAttributes<T>(Type type)
