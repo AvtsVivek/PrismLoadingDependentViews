@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+	<PackageReference Include="Trans.System.Windows.Interactivity" Version="3.0.40218.1" />
+    <ProjectReference Include="..\ModuleA\ModuleA.csproj" />
+    <PackageReference Include="Infragistics.WPF.Ribbon.Trial" Version="22.2.19" />
+    <PackageReference Include="Infragistics.WPF.Trial" Version="22.2.19" />
+  </ItemGroup>
+
+</Project>

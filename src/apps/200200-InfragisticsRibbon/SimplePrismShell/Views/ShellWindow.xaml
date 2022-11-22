@@ -1,0 +1,41 @@
+﻿<igWPF:XamRibbonWindow x:Class="SimplePrismShell.Views.ShellWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:SimplePrismShell"
+        xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" 
+        xmlns:localViews="clr-namespace:SimplePrismShell.Views"
+        mc:Ignorable="d"
+        xmlns:prism="http://prismlibrary.com/"
+
+
+        prism:ViewModelLocator.AutoWireViewModel="True"
+         
+        Title="{Binding WindowTitle}"
+        Height="720" Width="1280">
+
+    <igWPF:RibbonWindowContentHost Theme="Office2013">
+        <igWPF:RibbonWindowContentHost.Ribbon>
+            <igWPF:XamRibbon >
+                <igWPF:XamRibbon.ApplicationMenu2010>
+                    <igWPF:ApplicationMenu2010 Caption="File" />
+                </igWPF:XamRibbon.ApplicationMenu2010>
+                <igWPF:XamRibbon.QuickAccessToolbar>
+                    <igWPF:QuickAccessToolbar />
+                </igWPF:XamRibbon.QuickAccessToolbar>
+            </igWPF:XamRibbon>
+        </igWPF:RibbonWindowContentHost.Ribbon>
+
+        <DockPanel LastChildFill="True">
+            <StackPanel>
+                <Button Content="Navigate ViewA" Command="{Binding NavigateCommand}" CommandParameter="ViewA" />
+                <Button Content="Navigate ViewB" Command="{Binding NavigateCommand}" CommandParameter="ViewB" />
+            </StackPanel>
+            <ContentControl prism:RegionManager.RegionName="ContentRegion" Margin="1,3,3,3" />
+        </DockPanel>
+
+    </igWPF:RibbonWindowContentHost>
+
+</igWPF:XamRibbonWindow>
