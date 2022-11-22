@@ -1,23 +1,28 @@
 # Basic example of Tab Control. 
-- This builds from the previous example 200350-RibbonRegionBehavior
-- Demos how to share data context. Click update button on Ribbon View and it should update the view below.
-- First define an interface.
+- This builds from the previous example 
+- Change the Attribute RibbonTabAttribute to the following.
 
 ```cs
-public interface ISupportDataContext
-{
-    object DataContext { get; set; }
-}
+    public class DependentViewAttribute : Attribute
+    {
+        public Type Type { get; set; }
+        public string TargetRegionName { get; set; }
+
+        public DependentViewAttribute(Type viewType, string targetRegionName)
+        {
+            Type = viewType;
+            TargetRegionName = targetRegionName;
+        }
+    }
+
 ```
-
-
-- Impliment that interface for aall of the views.
-- Add the following logic to the RibbonRegionBehavior 
-
-```cs
-if (ribbonTabItem is ISupportDataContext && newView is ISupportDataContext)
-    ((ISupportDataContext)ribbonTabItem).DataContext = ((ISupportDataContext)newView).DataContext;
+- Build and fix errors. 
+- Add ViewC
+- Add another region in shell
+```xml
+<ContentControl prism:RegionManager.RegionName="SubRegion"  />
 ```
+- 
 
 - Now run the app. The update button the ribbon tab will invoke the one on View below. 
 

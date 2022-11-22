@@ -37,7 +37,7 @@ namespace SimplePrismShell
         protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors)
         {
             base.ConfigureDefaultRegionBehaviors(regionBehaviors);
-            regionBehaviors.AddIfMissing(RibbonRegionBehavior.BehaviorKey, typeof(RibbonRegionBehavior));
+            regionBehaviors.AddIfMissing(DependentViewRegionBehavior.BehaviorKey, typeof(DependentViewRegionBehavior));
         }
     }
 }
