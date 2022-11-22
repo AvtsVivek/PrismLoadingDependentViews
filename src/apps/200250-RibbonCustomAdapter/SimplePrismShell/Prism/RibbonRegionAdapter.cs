@@ -33,7 +33,7 @@ namespace SimplePrismShell.Prism
                 }
                 else if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
-                    foreach (var view in e.OldItems)
+                    foreach (var view in e.OldItems!)
                     {
                         RemoveViewFromRegion(view, regionTarget);
                     }
