@@ -1,0 +1,9 @@
+﻿<igWPF:RibbonTabItem x:Class="ModuleA.RibbonTabs.ViewATab"
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:igWPF="http://schemas.infragistics.com/xaml/wpf" 
+                     Header="View A Tab">
+    <igWPF:RibbonGroup Caption="My Actions">
+        <igWPF:ButtonTool Caption="Update View A" Command="{Binding UpdateCommand}" />
+    </igWPF:RibbonGroup>
+</igWPF:RibbonTabItem>
